@@ -17,8 +17,6 @@ exports.isNotLoggedIn = (req, res, next) => {
    } else {
       const error = new Error('이미 로그인 된 상태입니다.')
       error.status = 400
-      return error(err)
+      return next(error)
    }
 }
-
-module.exports = router

@@ -16,7 +16,7 @@ const app = express()
 app.set('port', process.env.PORT || 8002)
 
 sequelize
-   .sync({ force: false })
+   .sync({ force: true })
    .then(() => {})
    .catch((err) => {})
 

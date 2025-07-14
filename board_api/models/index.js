@@ -15,4 +15,7 @@ db.Board = Board
 Member.init(sequelize)
 Board.init(sequelize)
 
+Member.associate(db)
+Board.associate(db)
+
 module.exports = db

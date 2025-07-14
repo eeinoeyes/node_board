@@ -17,8 +17,8 @@ module.exports = class Board extends Sequelize.Model {
             sequelize,
             timestamps: true, //createAt, updateAt ..등 자동 생성
             underscored: false,
-            modelName: 'User',
-            tableName: 'users',
+            modelName: 'post',
+            tableName: 'posts',
             paranoid: true, // 소프트삭제 (deleteAt 자동 생성)
             charset: 'utf8mb4',
             collate: 'utf8mb4_general_ci',
@@ -27,7 +27,7 @@ module.exports = class Board extends Sequelize.Model {
    }
    static associate(db) {
       db.Board.belongsTo(db.Member, {
-         foriegnKey: 'member_id',
+         foreignKey: 'member_id',
          targetKey: 'id',
       })
    }

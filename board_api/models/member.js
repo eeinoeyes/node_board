@@ -31,7 +31,7 @@ module.exports = class Member extends Sequelize.Model {
    }
    static associate(db) {
       db.Member.hasMany(db.Board, {
-         foriegnKey: 'member_id',
+         foreignKey: 'member_id',
          sourceKey: 'id',
       })
    }
