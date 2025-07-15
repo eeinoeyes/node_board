@@ -29,7 +29,7 @@ router.post('/enter', isNotLoggedIn, async (req, res, next) => {
       res.status(201).json({
          success: true,
          message: '회원가입이 완료되었습니다.',
-         user: {
+         member: {
             id: newMember.id,
             email: newMember.email,
             name: newMember.name,

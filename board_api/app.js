@@ -4,19 +4,21 @@ const cookieParser = require('cookie-parser')
 const morgan = require('morgan')
 const session = require('express-session')
 require('dotenv').config()
-const cors = require('cors')
+const passport = require('passport')
 
 const indexRouter = require('./routes')
 const memberRouter = require('./routes/member')
 const boardRouter = require('./routes/board')
 
 const { sequelize } = require('./models') //db 내보내고 주석풀기
+const passportConfig = require('./passport')
 
 const app = express()
+passportConfig()
 app.set('port', process.env.PORT || 8002)
 
 sequelize
-   .sync({ force: true })
+   .sync({ force: false })
    .then(() => {})
    .catch((err) => {})
 
@@ -39,6 +41,9 @@ app.use(
       },
    })
 )
+//passport 초기화, 세션 연동
+app.use(passport.initialize()) // 초기화
+app.use(passport.session()) // passport와 생성해둔 세션 연결
 
 //라우터
 app.use('/', indexRouter)
