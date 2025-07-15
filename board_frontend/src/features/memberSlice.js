@@ -1,35 +1,95 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { checkAuthStatus, loginUser, registerUser } from '../api/snsApi'
-
+import { registerMember, loginMember, logoutMember } from '../api/boardApi'
 //회원가입
 export const registerMemberThunk = createAsyncThunk('member/resisterMember', async (memberData, { rejectWithValue }) => {
    try {
-      const response = await registerMemberThunk(memberData)
+      const response = await registerMember(memberData)
       return response.data
    } catch (err) {
-      return rejectWithValue(error.response?.data?.message)
+      return rejectWithValue(err.response?.data?.message)
    }
 })
 
 //로그인
-export const loginMemberThunk = createAsyncThunk('member/loginMember', async (_, { rejectWithValue }) => {
+export const loginMemberThunk = createAsyncThunk('member/loginMember', async (credentials, { rejectWithValue }) => {
    try {
+      //여기서 await하는 loginMember, 매개변수 credentials : boardApi에서 정의한 함수
+
+      const response = await loginMember(credentials)
+      return response.data.member
    } catch (err) {
-      return rejectWithValue(error.response?.data?.message)
+      return rejectWithValue(err.response?.data?.message)
    }
 })
 
 //로그아웃
 export const logoutMemberThunk = createAsyncThunk('member/logoutMember', async (_, { rejectWithValue }) => {
    try {
+      const response = await logoutMember()
+      return response.data
    } catch (err) {
-      return rejectWithValue(error.response?.data?.message)
+      return rejectWithValue(err.response?.data?.message)
    }
 })
 
 const memberSlice = createSlice({
-   name: 'board',
-   initialState: {},
-   reducer: {},
+   name: 'member',
+   initialState: {
+      member: null,
+      isAuthenticated: false,
+      loading: false,
+      error: null,
+   },
+   reducer: {
+      clearAuthError: (state) => {
+         state.error = null
+      },
+   },
+   extraReducers: (builder) => {
+      builder
+         //회원가입
+         .addCase(registerMemberThunk.pending, (state) => {
+            state.loading = true
+            state.error = null
+         })
+         .addCase(registerMemberThunk.fulfilled, (state, action) => {
+            state.loading = false
+            state.member = action.payload
+         })
+         .addCase(registerMemberThunk.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload
+         })
+
+         //로그인
+         .addCase(loginMemberThunk.pending, (state) => {
+            state.loading = true
+            state.error = null
+         })
+         .addCase(loginMemberThunk.fulfilled, (state, action) => {
+            state.loading = false
+            state.isAuthenticated = true
+            state.member = action.payload
+         })
+         .addCase(loginMemberThunk.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload
+         })
+
+         //로그아웃
+         .addCase(logoutMemberThunk.pending, (state) => {
+            state.loading = true
+            state.error = null
+         })
+         .addCase(logoutMemberThunk.fulfilled, (state, action) => {
+            state.loading = false
+            state.isAuthenticated = false
+            state.member = null // 로그아웃했으니까 유저 정보 없애기
+         })
+         .addCase(logoutMemberThunk.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload
+         })
+   },
 })
 export default memberSlice.reducer

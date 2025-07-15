@@ -41,3 +41,19 @@ export const logoutMember = async () => {
       throw err
    }
 }
+
+export const createPost = async (data) => {
+   try {
+      console.log('create-post-data:', data)
+      const config = {
+         headers: {
+            'Content-Type': 'multipart/form-data',
+         },
+      }
+      const response = await boardApi.post('/board', data, config)
+      return response
+   } catch (err) {
+      console.error(`포스트 등록 API Request 오류: ${err.message}`)
+      throw err
+   }
+}
