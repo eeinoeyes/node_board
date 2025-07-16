@@ -3,6 +3,7 @@ const path = require('path')
 const cookieParser = require('cookie-parser')
 const morgan = require('morgan')
 const session = require('express-session')
+const cors = require('cors')
 require('dotenv').config()
 const passport = require('passport')
 
@@ -30,6 +31,12 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser(process.env.COOKIE_SECRET))
 
 //세션
+app.use(
+   cors({
+      origin: 'http://localhost:5173', // 또는 origin: true (모든 도메인 허용 시)
+      credentials: true, // 쿠키 주고받기 허용 시 필요
+   })
+)
 app.use(
    session({
       resave: false,
@@ -61,7 +68,7 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
    console.error(err)
    const statusCode = err.status || 500
-   const errMessage = err.Message || '서버 내부 오류'
+   const errMessage = err.message || '서버 내부 오류'
 
    res.status(statusCode).json({
       success: false,

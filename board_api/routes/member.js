@@ -6,8 +6,8 @@ const Member = require('../models/member')
 const { isNotLoggedIn, isLoggedIn } = require('./middleware')
 
 //회원가입
-//localhost:8000/member/enter
-router.post('/enter', isNotLoggedIn, async (req, res, next) => {
+//localhost:8000/member
+router.post('/register', isNotLoggedIn, async (req, res, next) => {
    try {
       const { email, name, password } = req.body
       const exMember = await Member.findOne({ where: { email } })
@@ -61,21 +61,20 @@ router.post('/login', isNotLoggedIn, async (req, res, next) => {
             loginError.message = '로그인 중 오류 발생'
             return next(loginError)
          }
-      })
-
-      res.status(200).json({
-         success: true,
-         message: '로그인 성공',
-         member: {
-            id: member.id,
-            name: member.name,
-         },
+         res.status(200).json({
+            success: true,
+            message: '로그인 성공',
+            member: {
+               id: member.id,
+               name: member.name,
+            },
+         })
       })
    })(req, res, next)
 })
 
 //로그아웃
-router.get('/logout', isLoggedIn, async (req, res, next) => {
+router.get('/logout', async (req, res, next) => {
    req.logOut((logoutError) => {
       if (logoutError) {
          logoutError.status = 500
@@ -89,4 +88,23 @@ router.get('/logout', isLoggedIn, async (req, res, next) => {
       })
    })
 })
+
+//상태확인
+router.get('/status', (req, res) => {
+   if (req.isAuthenticated()) {
+      res.status(200).json({
+         isAuthenticated: true,
+         member: {
+            id: req.user.id,
+            name: req.user.name,
+         },
+      })
+   } else {
+      res.status(200).json({
+         isAuthenticated: false,
+         member: null,
+      })
+   }
+})
+
 module.exports = router

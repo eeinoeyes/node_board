@@ -1,0 +1,6 @@
+Button {
+   padding: 20px;
+}
+Button.contained {
+   background-color: pink;
+}

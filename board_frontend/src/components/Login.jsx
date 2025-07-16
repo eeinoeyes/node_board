@@ -1,5 +1,11 @@
+import { Container } from '@mui/material'
+import LoginForm from './auth/LoginForm'
 function Login() {
-   return <></>
+   return (
+      <Container maxWidth="md">
+         <LoginForm />
+      </Container>
+   )
 }
 
 export default Login

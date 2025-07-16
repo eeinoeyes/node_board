@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { registerMember, loginMember, logoutMember } from '../api/boardApi'
+import { registerMember, loginMember, logoutMember, checkAuthStatus } from '../api/boardApi'
 //회원가입
-export const registerMemberThunk = createAsyncThunk('member/resisterMember', async (memberData, { rejectWithValue }) => {
+export const registerMemberThunk = createAsyncThunk('member/registerMember', async (memberData, { rejectWithValue }) => {
    try {
       const response = await registerMember(memberData)
       return response.data
@@ -31,6 +31,15 @@ export const logoutMemberThunk = createAsyncThunk('member/logoutMember', async (
       return rejectWithValue(err.response?.data?.message)
    }
 })
+//상태확인
+export const checkAuthStatusThunk = createAsyncThunk('member/checkAuthStatus', async (_, { rejectWithValue }) => {
+   try {
+      const response = await checkAuthStatus()
+      return response
+   } catch (error) {
+      return rejectWithValue(error.response?.data?.message)
+   }
+})
 
 const memberSlice = createSlice({
    name: 'member',
@@ -40,7 +49,7 @@ const memberSlice = createSlice({
       loading: false,
       error: null,
    },
-   reducer: {
+   reducers: {
       clearAuthError: (state) => {
          state.error = null
       },
@@ -81,7 +90,7 @@ const memberSlice = createSlice({
             state.loading = true
             state.error = null
          })
-         .addCase(logoutMemberThunk.fulfilled, (state, action) => {
+         .addCase(logoutMemberThunk.fulfilled, (state) => {
             state.loading = false
             state.isAuthenticated = false
             state.member = null // 로그아웃했으니까 유저 정보 없애기
@@ -90,6 +99,21 @@ const memberSlice = createSlice({
             state.loading = false
             state.error = action.payload
          })
+         //상태확인
+         .addCase(checkAuthStatusThunk.pending, (state) => {
+            state.loading = true
+            state.error = null
+         })
+         .addCase(checkAuthStatusThunk.fulfilled, (state, action) => {
+            state.loading = false
+            state.isAuthenticated = action.payload.isAuthenticated
+            state.member = action.payload.member || null
+         })
+         .addCase(checkAuthStatusThunk.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload
+         })
    },
 })
+export const { clearAuthError } = memberSlice.actions
 export default memberSlice.reducer
