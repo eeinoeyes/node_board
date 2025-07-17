@@ -92,6 +92,70 @@ router.post('/', isLoggedIn, upload.single('img'), async (req, res, next) => {
    }
 })
 
+//게시물 수정하기
+router.put('/:id', isLoggedIn, upload.single('img'), async (req, res, next) => {
+   try {
+      const data = await Board.findOne({
+         where: {
+            id: req.params.id,
+            member_id: req.user.id,
+         },
+      })
+      if (!data) {
+         const error = new Error('게시물이 없습니다.')
+         error.status = 404
+         return next(error)
+      }
+      await data.update({
+         title: req.body.title,
+         content: req.body.content,
+         img: req.file ? `/${req.file.filename}` : data.img,
+      })
+
+      const updateData = await Board.findOne({
+         where: { id: req.params.id },
+         include: {
+            model: Member,
+            attributes: ['id', 'name'],
+         },
+      })
+
+      res.status(200).json({
+         success: true,
+         message: '게시물 수정 완료',
+         data,
+      })
+   } catch (error) {
+      error.status = 500
+      error.message = '게시물 수정 중 오류가 발생했습니다.'
+      next(error)
+   }
+})
+
+//게시물 삭제
+router.delete('/:id', isLoggedIn, async (req, res, next) => {
+   try {
+      const target = await Board.findOne({
+         where: { id: req.params.id, member_id: req.user.id },
+      })
+      if (!target) {
+         const error = new Error('게시물이 존재하지 않습니다.')
+         error.status = 404
+         return next(error)
+      }
+      await target.destroy()
+
+      res.status(200).json({
+         success: true,
+         message: '게시물이 성공적으로 삭제되었습니다.',
+      })
+   } catch (error) {
+      error.status = 500
+      error.message = '게시물 삭제 중 오류가 발생했습니다.'
+      next(error)
+   }
+})
+
 //전체 게시물 불러오기
 router.get('/', async (req, res, next) => {
    try {

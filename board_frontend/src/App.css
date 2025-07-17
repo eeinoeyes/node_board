@@ -1,0 +1,14 @@
+.Button.inputButton .Button.registerButton,
+.Button.loginButton {
+   background-color: rgb(255, 227, 232);
+   width: 150px;
+   border: none;
+   color: gray;
+   box-shadow: 1px 1px 3px;
+   padding: 10px;
+}
+.Button.loginButton {
+   background-color: rgb(255, 227, 232);
+
+   width: 100%;
+}

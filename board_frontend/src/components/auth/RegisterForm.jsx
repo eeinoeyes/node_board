@@ -4,9 +4,9 @@ import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 
-import { Link, Navigate, useNavigate } from 'react-router-dom'
-import { use, useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { registerMemberThunk, clearAuthError } from '../../features/memberSlice'
 
 import './auth.css'
@@ -114,7 +114,7 @@ function RegisterForm() {
                }}
             />
             <Stack>
-               <Button variant="contained" className="Button registerButton" type="submit">
+               <Button variant="contained" className="Button loginButton" type="submit">
                   가입하기
                </Button>
             </Stack>

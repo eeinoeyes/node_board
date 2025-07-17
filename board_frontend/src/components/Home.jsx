@@ -34,52 +34,81 @@ function Home() {
 
    return (
       <Container maxWidth="md">
-         <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-            게시글
-         </Typography>
-         <List
-            sx={{
-               display: 'flex',
-               flexDirection: 'column',
-               alignItems: 'center',
-            }}
-         >
-            {posts.map((post) => {
-               return (
-                  <ListItem
-                     key={post.id}
-                     sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: 40,
-                     }}
-                  >
-                     {post.img ? (
-                        <img
-                           src={`${import.meta.env.VITE_APP_API_URL}${post.img}`}
-                           alt="이미지 미리보기"
-                           style={{
-                              width: '50px',
-                           }}
-                        />
-                     ) : (
-                        <FolderIcon style={{ width: '50px' }} />
-                     )}
-                     <Link to={`/board/${post.id}`}>
-                        <ListItemText primary={post.title} sx={{ textAlign: 'center' }} />
-                     </Link>
+         {loading && (
+            <Typography variant="body1" align="center">
+               로딩 중...
+            </Typography>
+         )}
 
-                     <ListItemText primary={post.Member.name} sx={{ textAlign: 'right' }} />
-                  </ListItem>
-               )
-            })}
-         </List>
-         {pagination.totalPages > 0 && (
+         {error && (
+            <Typography variant="body1" align="center" color="error">
+               에러 발생: {error}
+            </Typography>
+         )}
+         {posts.length > 0 ? (
+            <List
+               sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+               }}
+            >
+               {posts.map((post) => {
+                  return (
+                     <ListItem
+                        key={post.id}
+                        sx={{
+                           display: 'flex',
+                           justifyContent: 'space-between',
+                           gap: '30px',
+                        }}
+                     >
+                        {post.img ? (
+                           <img
+                              src={`${import.meta.env.VITE_APP_API_URL}${post.img}`}
+                              alt="이미지 미리보기"
+                              style={{
+                                 width: '50px',
+                              }}
+                           />
+                        ) : (
+                           <FolderIcon style={{ width: '50px' }} />
+                        )}
+                        <Box sx={{ flex: 1, mx: 2 }}>
+                           <Link
+                              to={`/board/${post.id}`}
+                              style={{
+                                 display: 'block',
+                                 textDecoration: 'none',
+                              }}
+                           >
+                              <Typography
+                                 sx={{
+                                    width: '600px',
+                                    whiteSpace: 'nowrap',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    textAlign: 'center',
+                                 }}
+                              >
+                                 {post.title}
+                              </Typography>
+                           </Link>
+                        </Box>
+
+                        <ListItemText primary={post.Member.name} sx={{ textAlign: 'right' }} />
+                     </ListItem>
+                  )
+               })}
+            </List>
+         ) : (
+            <p>게시물이 없습니다.</p>
+         )}
+         {pagination.totalPages > 0 ? (
             <Stack spacing={5} sx={{ mt: 3, alignItems: 'center' }}>
                <Pagination count={pagination.totalPages} page={page} onChange={handlePageChange} variant="outlined" />
             </Stack>
-         )}
+         ) : null}
       </Container>
    )
 }

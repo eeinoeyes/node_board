@@ -91,3 +91,30 @@ export const getPostById = async (id) => {
       throw error
    }
 }
+
+//게시물 수정
+export const updatePost = async (id, postData) => {
+   try {
+      const config = {
+         headers: {
+            'Content-Type': 'multipart/form-data', // 파일 전송시 반드시 지정
+         },
+      }
+      const response = await boardApi.put(`/board/${id}`, postData, config)
+      console.log('Api / updatePost - response: ', response)
+      return response
+   } catch (error) {
+      console.error(`API Request 오류:${error.message} `)
+      throw error
+   }
+}
+
+export const deletePost = async (id) => {
+   try {
+      const response = await boardApi.delete(`/board/${id}`)
+      return response
+   } catch (error) {
+      console.error(`API Request 오류:${error.message} `)
+      throw error
+   }
+}

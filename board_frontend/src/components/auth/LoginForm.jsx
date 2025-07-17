@@ -4,7 +4,7 @@ import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { loginMemberThunk, clearAuthError } from '../../features/memberSlice'
 import { useDispatch, useSelector } from 'react-redux'
@@ -79,9 +79,7 @@ function Login() {
                   로그인
                </Button>
                <Link to={'/register'}>
-                  <Button className="Button registerButton" variant="outlined">
-                     가입
-                  </Button>
+                  <Button className="Button loginButton">가입</Button>
                </Link>
             </Stack>
          </form>
