@@ -9,6 +9,7 @@ import FolderIcon from '@mui/icons-material/Folder'
 import Pagination from '@mui/material/Pagination'
 import Stack from '@mui/material/Stack'
 import { Container } from '@mui/material'
+import { useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
@@ -16,47 +17,67 @@ import { getPostsThunk } from '../features/boardSlice'
 
 function Home() {
    const { posts, pagination, loading, error } = useSelector((state) => state.board)
+   const [page, setPage] = useState(1)
    const dispatch = useDispatch()
-   console.log('💟Home.jsx - posts:', posts)
+
+   // console.log('💟Home.jsx - posts:', posts)
+   // console.log('💟Home.jsx - pagination:', pagination)
+
+   const handlePageChange = (e, value) => {
+      setPage(value)
+   }
 
    useEffect(() => {
-      dispatch(getPostsThunk({ page: 1 }))
-   }, [dispatch])
+      dispatch(getPostsThunk(page))
+   }, [dispatch, page])
 
    return (
       <Container maxWidth="md">
          <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
             게시글
          </Typography>
-         <List>
+         <List
+            sx={{
+               display: 'flex',
+               flexDirection: 'column',
+               alignItems: 'center',
+            }}
+         >
             {posts.map((post) => {
                return (
-                  <ListItem>
+                  <ListItem
+                     key={post.id}
+                     sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 40,
+                     }}
+                  >
                      {post.img ? (
                         <img
                            src={`${import.meta.env.VITE_APP_API_URL}${post.img}`}
-                           alt=""
+                           alt="이미지 미리보기"
                            style={{
-                              width: '30px',
+                              width: '50px',
                            }}
-                           key={post.id}
                         />
                      ) : (
-                        <FolderIcon key={post.id} />
+                        <FolderIcon style={{ width: '50px' }} />
                      )}
-                     <ListItemText primary={post.title} />
-                     <ListItemText primary={post.Member.name} />
+                     <ListItemText primary={post.title} sx={{ textAlign: 'center' }} />
+                     <ListItemText primary={post.Member.name} sx={{ textAlign: 'right' }} />
                   </ListItem>
                )
             })}
          </List>
-         <Stack spacing={5}>
-            <Pagination count={10} variant="outlined" />
-         </Stack>
+         {pagination.totalPages > 0 && (
+            <Stack spacing={5} sx={{ mt: 3, alignItems: 'center' }}>
+               <Pagination count={pagination.totalPages} page={page} onChange={handlePageChange} variant="outlined" />
+            </Stack>
+         )}
       </Container>
    )
 }
 
 export default Home
-
-//250716 페이지네이션구현중

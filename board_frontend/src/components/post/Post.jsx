@@ -2,7 +2,7 @@ import { Container, TextField, Button, Box } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { createPostThunk } from '../features/boardSlice'
+import { createPostThunk } from '../../features/boardSlice'
 function Post() {
    const dispatch = useDispatch()
    const navigate = useNavigate()

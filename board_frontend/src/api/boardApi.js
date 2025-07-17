@@ -79,3 +79,15 @@ export const getPosts = async (page) => {
       throw error
    }
 }
+
+//특정 게시물만 가져오기
+export const getPostById = async (id) => {
+   try {
+      const response = await boardApi.get(`/board/${id}`)
+      console.log('💖boardApi / getPostById - response:', response)
+      return response
+   } catch (error) {
+      console.error(`API Request 오류:${error.message} `)
+      throw error
+   }
+}

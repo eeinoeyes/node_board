@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { createPost, getPosts } from '../api/boardApi'
+import { createPost, getPostById, getPosts } from '../api/boardApi'
 
 //게시글 등록
 export const createPostThunk = createAsyncThunk('board/createPost', async (data, { rejectWithValue }) => {
@@ -23,6 +23,15 @@ export const getPostsThunk = createAsyncThunk('board/getPosts', async (page, { r
    }
 })
 
+//특정 게시물 가져오기
+export const getPostByIdThunk = createAsyncThunk('board/getPostById', async (id, { rejectWithValue }) => {
+   try {
+      const response = await getPostById(id)
+      console.log('💫boardSlice / getPostByIdThunk - respones: ', response.data)
+   } catch (error) {
+      return rejectWithValue(err.response?.data?.message)
+   }
+})
 const boardSlice = createSlice({
    name: 'board',
    initialState: {
