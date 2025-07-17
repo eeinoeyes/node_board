@@ -109,4 +109,30 @@ router.get('/', async (req, res, next) => {
    }
 })
 
+//특정 게시물 불러오기
+router.get('/:id', async (req, res, next) => {
+   try {
+      const targetPost = await Board.findOne({
+         where: { id: req.params.id },
+         include: {
+            model: Member,
+            attributes: ['id', 'name'],
+         },
+      })
+      if (!targetPost) {
+         const error = new Error('게시물을 찾을 수 없습니다.')
+         error.status = 404
+         next(error)
+      }
+      res.status(200).json({
+         success: true,
+         message: '게시물을 성공적으로 불러왔습니다.',
+         post: targetPost,
+      })
+   } catch (error) {
+      error.status = 500
+      error.message = '특정 게시물을 불러오는 중 오류가 발생했습니다.'
+      next(error)
+   }
+})
 module.exports = router
