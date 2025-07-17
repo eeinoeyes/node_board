@@ -10,6 +10,7 @@ import Pagination from '@mui/material/Pagination'
 import Stack from '@mui/material/Stack'
 import { Container } from '@mui/material'
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
@@ -65,7 +66,10 @@ function Home() {
                      ) : (
                         <FolderIcon style={{ width: '50px' }} />
                      )}
-                     <ListItemText primary={post.title} sx={{ textAlign: 'center' }} />
+                     <Link to={`/board/${post.id}`}>
+                        <ListItemText primary={post.title} sx={{ textAlign: 'center' }} />
+                     </Link>
+
                      <ListItemText primary={post.Member.name} sx={{ textAlign: 'right' }} />
                   </ListItem>
                )

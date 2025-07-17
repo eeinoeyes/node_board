@@ -5,6 +5,7 @@ import Login from './components/Login'
 import Post from './components/post/Post'
 import Register from './components/Register'
 import Navbar from './components/shared/Navbar'
+import PostDetail from './components/post/PostDetail'
 
 import './styles/common.css'
 import { checkAuthStatusThunk } from './features/memberSlice'
@@ -25,6 +26,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/post/create" element={<Post />} />
+            <Route path="/board/:id" element={<PostDetail />} />
          </Routes>
       </>
    )

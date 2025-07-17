@@ -28,6 +28,7 @@ export const getPostByIdThunk = createAsyncThunk('board/getPostById', async (id,
    try {
       const response = await getPostById(id)
       console.log('💫boardSlice / getPostByIdThunk - respones: ', response.data)
+      return response.data
    } catch (error) {
       return rejectWithValue(err.response?.data?.message)
    }
@@ -68,6 +69,19 @@ const boardSlice = createSlice({
             state.pagination = action.payload.pagination
          })
          .addCase(getPostsThunk.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload
+         })
+         //특정 게시물만 가져오기
+         .addCase(getPostByIdThunk.pending, (state) => {
+            state.loading = true
+            state.error = null
+         })
+         .addCase(getPostByIdThunk.fulfilled, (state, action) => {
+            state.loading = false
+            state.data = action.payload.data
+         })
+         .addCase(getPostByIdThunk.rejected, (state, action) => {
             state.loading = false
             state.error = action.payload
          })
