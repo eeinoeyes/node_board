@@ -33,7 +33,7 @@ function Login() {
       dispatch(loginMemberThunk({ email, password }))
          .unwrap()
          .then(() => {
-            console.log(`💕${email}로 로그인 완료`)
+            // console.log(`💕${email}로 로그인 완료`)
             navigate('/')
          })
          .catch((err) => console.error(`로그인 실패: ${err}`))

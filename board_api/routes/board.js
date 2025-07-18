@@ -33,7 +33,7 @@ const upload = multer({
 //특정 게시물 불러오기
 router.get('/:id', async (req, res, next) => {
    try {
-      console.log('📦요청받은 ID:', req.params.id)
+      // console.log('📦요청받은 ID:', req.params.id)
       const targetPost = await Board.findOne({
          where: { id: req.params.id },
          include: {
@@ -62,7 +62,7 @@ router.get('/:id', async (req, res, next) => {
 //게시물 작성하기
 router.post('/', isLoggedIn, upload.single('img'), async (req, res, next) => {
    try {
-      console.log('💥req:', req)
+      // console.log('💥req:', req)
       if (!req.body.title || !req.body.content) {
          const error = new Error('제목과 본문은 필수입력값입니다.')
          error.status = 400
@@ -172,7 +172,7 @@ router.get('/', async (req, res, next) => {
             attributes: ['id', 'email', 'name'],
          },
       })
-      console.log('백엔드 board.js / router.get - posts:', posts)
+      // console.log('백엔드 board.js / router.get - posts:', posts)
 
       res.status(200).json({
          success: true,

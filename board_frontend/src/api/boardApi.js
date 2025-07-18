@@ -56,7 +56,7 @@ export const checkAuthStatus = async () => {
 //새글 등록
 export const createPost = async (data) => {
    try {
-      console.log('create-post-data:', data)
+      // console.log('create-post-data:', data)
       const config = {
          headers: {
             'Content-Type': 'multipart/form-data',
@@ -84,7 +84,7 @@ export const getPosts = async (page) => {
 export const getPostById = async (id) => {
    try {
       const response = await boardApi.get(`/board/${id}`)
-      console.log('💖boardApi / getPostById - response:', response)
+      // console.log('💖boardApi / getPostById - response:', response)
       return response
    } catch (error) {
       console.error(`API Request 오류:${error.message} `)
@@ -101,7 +101,7 @@ export const updatePost = async (id, postData) => {
          },
       }
       const response = await boardApi.put(`/board/${id}`, postData, config)
-      console.log('Api / updatePost - response: ', response)
+      // console.log('Api / updatePost - response: ', response)
       return response
    } catch (error) {
       console.error(`API Request 오류:${error.message} `)

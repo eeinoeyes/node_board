@@ -23,10 +23,10 @@ function PostDetail({ isAuthenticated, member }) {
 
    useEffect(() => {
       dispatch(getPostByIdThunk(id))
-   }, [dispatch])
+   }, [dispatch, id])
 
    const { data, loading, error } = useSelector((state) => state.board)
-   console.log('💥detail data:', data)
+   // console.log('💥detail data:', data)
 
    const onClickDelete = (id) => {
       const targetDelete = confirm('정말 삭제하시겠습니까?')
@@ -40,7 +40,9 @@ function PostDetail({ isAuthenticated, member }) {
             .catch((error) => console.error('에러 발생:', error))
       }
    }
-   if (loading) {
+   const isDataReady = data && data.createdAt && data.Member
+
+   if (loading || !isDataReady) {
       return <p>게시물을 불러오는 중입니다...</p>
    }
    if (error) {
@@ -55,12 +57,12 @@ function PostDetail({ isAuthenticated, member }) {
          {/* 작성일자/작성자 - 우측 하단 */}
          <Box sx={{ display: 'flex', justifyContent: 'flex-end', px: 2, mb: 1 }}>
             <Typography variant="body2" color="text.secondary">
-               작성일자: {data.createdAt.split('T')[0]}　작성자: {data.Member.name}
+               작성일자: {data?.createdAt.split('T')[0]}　작성자: {data.Member.name}
             </Typography>
          </Box>
          {isAuthenticated && data.Member.id === member.id ? (
             <CardActions sx={{ display: 'flex', justifyContent: 'end' }}>
-               <Link to={`/board/edit/${data.id}`} state={{ initialData: data }}>
+               <Link to={`/board/edit/${data?.id}`} state={{ initialData: data }}>
                   <IconButton>
                      <EditIcon />
                   </IconButton>
@@ -71,9 +73,9 @@ function PostDetail({ isAuthenticated, member }) {
                </IconButton>
             </CardActions>
          ) : null}
-         {data.img ? <CardMedia component="img" image={`${import.meta.env.VITE_APP_API_URL}${data.img}`} alt="게시글이미지" /> : null}
+         {data.img ? <CardMedia component="img" image={`${import.meta.env.VITE_APP_API_URL}${data?.img}`} alt="게시글이미지" /> : null}
          <CardContent>
-            <Typography sx={{ color: 'text.secondary' }}>{data.content}</Typography>
+            <Typography sx={{ color: 'text.secondary' }}>{data?.content}</Typography>
          </CardContent>{' '}
          <CardActions disableSpacing sx={{ display: 'flex', justifyContent: 'center' }}>
             <Link to={`/`} state={{ initialData: data }}>

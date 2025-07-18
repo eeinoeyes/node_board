@@ -5,7 +5,7 @@ import { createPost, deletePost, getPostById, getPosts, updatePost } from '../ap
 export const createPostThunk = createAsyncThunk('board/createPost', async (data, { rejectWithValue }) => {
    try {
       const response = await createPost(data)
-      console.log(response.data.post)
+      // console.log(response.data.post)
       return response.data.post
    } catch (err) {
       return rejectWithValue(error.response?.data?.message)
@@ -16,7 +16,7 @@ export const createPostThunk = createAsyncThunk('board/createPost', async (data,
 export const getPostsThunk = createAsyncThunk('board/getPosts', async (page, { rejectWithValue }) => {
    try {
       const response = await getPosts(page)
-      console.log('💖boardSlice / getPostsThunk - response: ', response)
+      // console.log('💖boardSlice / getPostsThunk - response: ', response)
       return response.data
    } catch (error) {
       return rejectWithValue(error.response?.data?.message)
@@ -27,7 +27,7 @@ export const getPostsThunk = createAsyncThunk('board/getPosts', async (page, { r
 export const getPostByIdThunk = createAsyncThunk('board/getPostById', async (id, { rejectWithValue }) => {
    try {
       const response = await getPostById(id)
-      console.log('💫boardSlice / getPostByIdThunk - response: ', response.data)
+      // console.log('💫boardSlice / getPostByIdThunk - response: ', response.data)
       return response.data
    } catch (error) {
       return rejectWithValue(error.response?.data?.message)
@@ -38,9 +38,9 @@ export const getPostByIdThunk = createAsyncThunk('board/getPostById', async (id,
 export const updatePostThunk = createAsyncThunk('board/updatePost', async (data, { rejectWithValue }) => {
    try {
       const { id, postData } = data
-      console.log('💦boardSlice / updatePostThunk - id, postData:', id, postData)
+      // console.log('💦boardSlice / updatePostThunk - id, postData:', id, postData)
       const response = await updatePost(id, postData)
-      console.log('💦boardSlice / updatePostThunk - response:', response)
+      // console.log('💦boardSlice / updatePostThunk - response:', response)
       return response.data.data
    } catch (error) {
       return rejectWithValue(error.response?.data?.message)
